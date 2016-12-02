@@ -1,19 +1,20 @@
 import random
 import math
 class AI:
-    def __init__(self, personality, minodds, maxodds, rawodds, tocall, currentvalue, betround):
-        self.personality = personality
+    def __init__(self):
+        self.numplayers = 5
+        
+
+
+    def refineOdds(self, minodds, maxodds, rawodds, tocall, currentvalue, betround, bigblind):
         self.minodds = minodds
         self.rawodds = rawodds
         self.maxodds = maxodds
         self.tocall = tocall
         self.currentvalue = currentvalue
         self.betround = betround
-        self.numplayers = 5
+        self.bigblind = bigblind
         
-
-
-    def refineOdds(self, minodds, maxodds, rawodds, tocall, currentvalue, betround):
         if self.betround == "preflop":
             #Refines the odds of playing by taking the curent raw odds, the max % possible (~40% with pocket aces and 4 players preflop), and the number of players and basing the odds of playing the hand on an exponential scale. For example, 2-7 unsuited has a 4% chance of calling and pocket aces has a ~99% chance of calling.
             self.oddsofplaying = math.exp(self.rawodds*self.numplayers)/math.exp(self.maxodds*self.numplayers)
@@ -27,7 +28,7 @@ class AI:
             elif 0.66 < self.oddsofplaying <= 0.8:
                 self.oddsofplaying = self.oddsofplaying ** (1/6)
             
-            elif 0.8 < self.oddsofplaying <=1:
+            elif 0.8 < self.oddsofplaying <= 1:
                 self.oddsofplaying = self.oddsofplaying ** (1/7)
             
             #Takes into consideration the amount that is required to call vs. the stash of the player if the refined odds are less than 80%
@@ -62,137 +63,17 @@ class AI:
             self.oddsofplaying = self.oddsofplaying * 100
             self.oddsofplaying = int(self.oddsofplaying) + 1
             print("Final odds", self.oddsofplaying)
+            return self.oddsofplaying
         
         
-
-    def tightAggressive(self, oddsofplaying):
-        if self.oddsofplaying <= 50:
-            return "Fold"
-            
-        elif 50 < self.oddsofplaying <= 60:
-            myvar = random.randrange(101)
-            if myvar < 30:
-                return "Fold"
-            
-            elif myvar >= 30:
-                return "Call"
+    def aiDecision(self, oddsofplaying, personality):
+        self.personality = personality
         
-        elif 60 < self.oddsofplaying <= 70:
-            return "Call"
-        
-        elif 70 < self.oddsofplaying <= 77:
-            myvar = random.randrange(101)
-            if myvar < 50:
-                return "Call"
-            
-            elif 50 <= myvar < 87:
-                return "Raise2BB"
-            
-            elif myvar >= 87:
-                return "Raise3BB"
-        
-        elif 77 < self.oddsofplaying <=85:
-            myvar = random.randrange(101)
-            if myvar < 25:
-                return "Call"
-            
-            elif 25 <= myvar < 75:
-                return "Raise2BB"
-                
-            elif 75 <= myvar < 87:
-                return "Raise3BB"
-            
-            elif myvar >= 87:
-                return "RaisePot"
-                
-        elif self.oddsofplaying > 85:
-            myvar = random.randrange(101)
-            
-            if myvar < 33:
-                return "Raise2BB"
-            
-            elif 33 <= myvar < 66:
-                return "Raise3BB"
-                
-            elif 66 <= myvar < 85:
-                return "RaisePot"
-                
-            elif myvar >= 85 and self.currentvalue < 2500:
-                return "AllIn"
-            
-            elif myvar >= 85:
-                return "Raise2Pot"
-        
-    def looseAggressive(self):
-        if self.oddsofplaying <= 15:
-            return "Fold"
-            
-        elif 15 < self.oddsofplaying <= 30:
-            myvar = random.randrange(101)
-            if myvar < 30:
-                return "Fold"
-            
-            elif myvar >= 30:
-                return "Call"
-        
-        elif 30 < self.oddsofplaying <= 70:
-            return "Call"
-        
-        elif 70 < self.oddsofplaying <= 77:
-            myvar = random.randrange(101)
-            if myvar < 50:
-                return "Call"
-            
-            elif 50 <= myvar < 87:
-                return "Raise2BB"
-            
-            elif myvar >= 87:
-                return "Raise3BB"
-        
-        elif 77 < self.oddsofplaying <=85:
-            myvar = random.randrange(101)
-            if myvar < 25:
-                return "Call"
-            
-            elif 25 <= myvar < 75:
-                return "Raise2BB"
-                
-            elif 75 <= myvar < 87:
-                return "Raise3BB"
-            
-            elif myvar >= 87:
-                return "RaisePot"
-                
-        elif self.oddsofplaying > 85:
-            myvar = random.randrange(101)
-            
-            if myvar < 33:
-                return "Raise2BB"
-            
-            elif 33 <= myvar < 66:
-                return "Raise3BB"
-                
-            elif 66 <= myvar < 85:
-                return "RaisePot"
-                
-            elif myvar >= 85 and self.currentvalue < 2500:
-                return "AllIn"
-            
-            elif myvar >= 85:
-                return "Raise2Pot"
-
-    def tightPassive(self, oddsofplaying):
-        if self.tocall > self.bigblind * 3:
-            if self.oddsofplaying < 85:
-                return "Fold"
-            elif self.oddsofplaying >= 85:
-                return "Call"
-
-        elif self.tocall < self.bigblind * 3:        
+        if self.personality == "tightaggressive":
             if self.oddsofplaying <= 50:
                 return "Fold"
                 
-            elif 50 < self.oddsofplaying <= 70:
+            elif 50 < self.oddsofplaying <= 60:
                 myvar = random.randrange(101)
                 if myvar < 30:
                     return "Fold"
@@ -200,18 +81,21 @@ class AI:
                 elif myvar >= 30:
                     return "Call"
             
-            elif 70 < self.oddsofplaying <= 77:
+            elif 60 < self.oddsofplaying <= 70:
                 return "Call"
             
-            elif 77 < self.oddsofplaying <= 85:
+            elif 70 < self.oddsofplaying <= 77:
                 myvar = random.randrange(101)
-                if myvar < 75:
+                if myvar < 50:
                     return "Call"
                 
-                elif myvar >= 75:
+                elif 50 <= myvar < 87:
                     return "Raise2BB"
+                
+                elif myvar >= 87:
+                    return "Raise3BB"
             
-            elif self.oddsofplaying > 85:
+            elif 77 < self.oddsofplaying <=85:
                 myvar = random.randrange(101)
                 if myvar < 25:
                     return "Call"
@@ -219,21 +103,35 @@ class AI:
                 elif 25 <= myvar < 75:
                     return "Raise2BB"
                     
-                elif myvar >= 75:
+                elif 75 <= myvar < 87:
                     return "Raise3BB"
-
-    def tightPassive(self, oddsofplaying):
-        if self.tocall > self.bigblind * 3:
-            if self.oddsofplaying < 85:
-                return "Fold"
-            elif self.oddsofplaying >= 85:
-                return "Call"
-
-        elif self.tocall < self.bigblind * 3:        
-            if self.oddsofplaying <= 50:
+                
+                elif myvar >= 87:
+                    return "RaisePot"
+                    
+            elif self.oddsofplaying > 85:
+                myvar = random.randrange(101)
+                
+                if myvar < 33:
+                    return "Raise2BB"
+                
+                elif 33 <= myvar < 66:
+                    return "Raise3BB"
+                    
+                elif 66 <= myvar < 85:
+                    return "RaisePot"
+                    
+                elif myvar >= 85 and self.currentvalue < 2500:
+                    return "AllIn"
+                
+                elif myvar >= 85:
+                    return "Raise2Pot"
+        
+        elif self.personality == "looseaggressive":
+            if self.oddsofplaying <= 15:
                 return "Fold"
                 
-            elif 50 < self.oddsofplaying <= 70:
+            elif 15 < self.oddsofplaying <= 30:
                 myvar = random.randrange(101)
                 if myvar < 30:
                     return "Fold"
@@ -241,62 +139,204 @@ class AI:
                 elif myvar >= 30:
                     return "Call"
             
-            elif 70 < self.oddsofplaying <= 77:
+            elif 30 < self.oddsofplaying <= 70:
                 return "Call"
+            
+            elif 70 < self.oddsofplaying <= 77:
+                myvar = random.randrange(101)
+                if myvar < 50:
+                    return "Call"
+                
+                elif 50 <= myvar < 87:
+                    return "Raise2BB"
+                
+                elif myvar >= 87:
+                    return "Raise3BB"
             
             elif 77 < self.oddsofplaying <= 85:
                 myvar = random.randrange(101)
-                if myvar < 75:
-                    return "Call"
-                
-                elif myvar >= 75:
-                    return "Raise2BB"
-            
-            elif self.oddsofplaying > 85:
-                myvar = random.randrange(101)
                 if myvar < 25:
                     return "Call"
                 
                 elif 25 <= myvar < 75:
                     return "Raise2BB"
                     
-                elif myvar >= 75:
+                elif 75 <= myvar < 87:
                     return "Raise3BB"
-
-    def loosePassive(self, oddsofplaying):
-        if self.tocall > self.bigblind * 3:
-            if self.oddsofplaying < 85:
-                return "Fold"
-            elif self.oddsofplaying >= 85:
-                return "Call"
-
-        elif self.tocall < self.bigblind * 3:       
-  
-            elif self.oddsofplaying <= 70:
-                return "Call"
-            
-            elif 70 < self.oddsofplaying <= 85:
-                myvar = random.randrange(101)
-                if myvar < 75:
-                    return "Call"
                 
-                elif myvar >= 75:
-                    return "Raise2BB"
-            
+                elif myvar >= 87:
+                    return "RaisePot"
+                    
             elif self.oddsofplaying > 85:
                 myvar = random.randrange(101)
-                if myvar < 25:
+                
+                if myvar < 33:
+                    return "Raise2BB"
+                
+                elif 33 <= myvar < 66:
+                    return "Raise3BB"
+                    
+                elif 66 <= myvar < 85:
+                    return "RaisePot"
+                    
+                elif myvar >= 85 and self.currentvalue < 2500:
+                    return "AllIn"
+                
+                elif myvar >= 85:
+                    return "Raise2Pot"
+
+        elif self.personality == "loosepassive":
+            if self.tocall > self.bigblind * 3:
+                if self.oddsofplaying < 85:
+                    return "Fold"
+                elif self.oddsofplaying >= 85:
+                    return "Call"
+    
+            elif self.tocall < self.bigblind * 3:        
+                if self.oddsofplaying <= 50:
+                    return "Fold"
+                    
+                elif 50 < self.oddsofplaying <= 70:
+                    myvar = random.randrange(101)
+                    if myvar < 30:
+                        return "Fold"
+                    
+                    elif myvar >= 30:
+                        return "Call"
+                
+                elif 70 < self.oddsofplaying <= 77:
                     return "Call"
                 
-                elif 25 <= myvar < 75:
-                    return "Raise2BB"
+                elif 77 < self.oddsofplaying <= 85:
+                    myvar = random.randrange(101)
+                    if myvar < 75:
+                        return "Call"
                     
-                elif myvar >= 75:
+                    elif myvar >= 75:
+                        return "Raise2BB"
+                
+                elif self.oddsofplaying > 85:
+                    myvar = random.randrange(101)
+                    if myvar < 25:
+                        return "Call"
+                    
+                    elif 25 <= myvar < 75:
+                        return "Raise2BB"
+                        
+                    elif myvar >= 75:
+                        return "Raise3BB"
+
+        elif self.personality == "tightpassive":
+            if self.tocall > self.bigblind * 3:
+                if self.oddsofplaying < 85:
+                    return "Fold"
+                elif self.oddsofplaying >= 85:
+                    return "Call"
+    
+            elif self.tocall < self.bigblind * 3:        
+                if self.oddsofplaying <= 50:
+                    return "Fold"
+                    
+                elif 50 < self.oddsofplaying <= 70:
+                    myvar = random.randrange(101)
+                    if myvar < 30:
+                        return "Fold"
+                    
+                    elif myvar >= 30:
+                        return "Call"
+                
+                elif 70 < self.oddsofplaying <= 77:
+                    return "Call"
+                
+                elif 77 < self.oddsofplaying <= 85:
+                    myvar = random.randrange(101)
+                    if myvar < 75:
+                        return "Call"
+                    
+                    elif myvar >= 75:
+                        return "Raise2BB"
+                
+                elif self.oddsofplaying > 85:
+                    myvar = random.randrange(101)
+                    if myvar < 25:
+                        return "Call"
+                    
+                    elif 25 <= myvar < 75:
+                        return "Raise2BB"
+                        
+                    elif myvar >= 75:
+                        return "Raise3BB"
+    
+        elif self.personality == "loosepassive":
+            if self.tocall > self.bigblind * 3:
+                if self.oddsofplaying < 85:
+                    return "Fold"
+                elif self.oddsofplaying >= 85:
+                    return "Call"
+    
+            elif self.tocall < self.bigblind * 3:       
+      
+                if self.oddsofplaying <= 70:
+                    return "Call"
+                
+                elif 70 < self.oddsofplaying <= 85:
+                    myvar = random.randrange(101)
+                    if myvar < 75:
+                        return "Call"
+                    
+                    elif myvar >= 75:
+                        return "Raise2BB"
+                
+                elif self.oddsofplaying > 85:
+                    myvar = random.randrange(101)
+                    if myvar < 25:
+                        return "Call"
+                    
+                    elif 25 <= myvar < 75:
+                        return "Raise2BB"
+                        
+                    elif myvar >= 75:
+                        return "Raise3BB"
+        elif self.personality == "madman":
+            if self.oddsofplaying < 35:
+                myvar = random.randrange(101)
+        
+                if myvar <= 50:
+                    return "Call"
+        
+                elif myvar > 50:
+                    return "Raise2BB"
+        
+            elif 35 <= self.oddsofplaying < 50:
+                return "Raise2BB"
+        
+            elif 50 <= self.oddsofplaying < 66:
+                myvar = random.randrange(101)
+        
+                if myvar <= 50:
                     return "Raise3BB"
+        
+                elif myvar > 50:
+                    return "RaisePot"
+        
+            elif self.oddsofplaying >= 66:
+                myvar = random.randrange(101)
+                if myvar <= 30:
+                    return "RaisePot"
+                elif myvar > 30:
+                    return "AllIn"
+
+
 
 def main():
-    refinedodds = float(AI.refineOdds(0.1, 1, 0.56, 100, 10000, "postflop"))
-    AI.tightAggressive(refinedodds)
-    #AI("looseaggressive")
+    terminator = AI()
+    #refinedodds = AI.refineOdds(0.1, 1, 0.56, 100, 10000, "postflop", 100)
+    #print(refinedodds)
+    refinedodds = float(terminator.refineOdds(0.1, 1, 0.56, 100, 10000, "postflop", 100))
+    print(terminator.aiDecision(refinedodds, "tightaggressive"))
+    print(terminator.aiDecision(refinedodds, "looseaggressive"))
+    print(terminator.aiDecision(refinedodds, "tightpassive"))
+    print(terminator.aiDecision(refinedodds, "loosepassive"))
+    print(terminator.aiDecision(refinedodds, "madman"))
 main()
 
