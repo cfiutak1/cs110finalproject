@@ -17,24 +17,26 @@ class AI:
         
         if self.betround == "preflop":
             #Refines the odds of playing by taking the curent raw odds, the max % possible (~40% with pocket aces and 4 players preflop), and the number of players and basing the odds of playing the hand on an exponential scale. For example, 2-7 unsuited has a 4% chance of calling and pocket aces has a ~99% chance of calling.
-            self.oddsofplaying = math.exp(self.rawodds*self.numplayers)/math.exp(self.maxodds*self.numplayers)
+            self.oddsofplaying = (math.exp(self.rawodds*self.numplayers)/math.exp(self.maxodds*self.numplayers)) ** (2/3)
+            print("Exponentiated", self.oddsofplaying)
 
-            if self.oddsofplaying <= 0.5:
+            if self.oddsofplaying <= 0.3:
                 self.oddsofplaying = self.oddsofplaying ** 1.87
-            
-            elif 0.5 < self.oddsofplaying <= 0.66:
+                print("Adjusted for odds", self.oddsofplaying)
+            elif 0.3 < self.oddsofplaying <= 0.66:
                 self.oddsofplaying = self.oddsofplaying
-           
+                print("Adjusted for odds", self.oddsofplaying)
             elif 0.66 < self.oddsofplaying <= 0.8:
                 self.oddsofplaying = self.oddsofplaying ** (1/6)
-            
+                print("Adjusted for odds", self.oddsofplaying)
             elif 0.8 < self.oddsofplaying <= 1:
                 self.oddsofplaying = self.oddsofplaying ** (1/7)
-            
+                print("Adjusted for odds", self.oddsofplaying)
+
             #Takes into consideration the amount that is required to call vs. the stash of the player if the refined odds are less than 80%
             if self.oddsofplaying < 0.8:
                 self.oddsofplaying = self.oddsofplaying - (self.oddsofplaying * (math.log(self.tocall)/math.log(self.currentvalue)) ** ((self.rawodds/self.minodds) ** 4.13))
-          
+                print("Adjusted for cost", self.oddsofplaying)
             #Converts to a scale out of 100      
             self.oddsofplaying = self.oddsofplaying * 100
             self.oddsofplaying = int(self.oddsofplaying) + 1
@@ -42,7 +44,7 @@ class AI:
             
 
         elif self.betround == "postflop" or "postturn" or "postriver":
-            self.oddsofplaying = (math.exp(self.rawodds*self.numplayers)/math.exp(self.maxodds*self.numplayers)) ** (1/4)
+            self.oddsofplaying = (math.exp(self.rawodds*self.numplayers)/math.exp(self.maxodds*self.numplayers)) ** (1/3.2)
 
             if self.oddsofplaying <= 0.2:
                 self.oddsofplaying = self.oddsofplaying ** 1.87
@@ -70,10 +72,11 @@ class AI:
         self.personality = personality
         
         if self.personality == "tightaggressive":
-            if self.oddsofplaying <= 50:
+            if self.oddsofplaying <= 37:
                 return "Fold"
                 
-            elif 50 < self.oddsofplaying <= 60:
+
+            elif 37 < self.oddsofplaying <= 60:
                 myvar = random.randrange(101)
                 if myvar < 30:
                     return "Fold"
@@ -297,6 +300,7 @@ class AI:
                         
                     elif myvar >= 75:
                         return "Raise3BB"
+
         elif self.personality == "madman":
             if self.oddsofplaying < 35:
                 myvar = random.randrange(101)
@@ -325,18 +329,3 @@ class AI:
                     return "RaisePot"
                 elif myvar > 30:
                     return "AllIn"
-
-
-
-def main():
-    terminator = AI()
-    #refinedodds = AI.refineOdds(0.1, 1, 0.56, 100, 10000, "postflop", 100)
-    #print(refinedodds)
-    refinedodds = float(terminator.refineOdds(0.1, 1, 0.56, 100, 10000, "postflop", 100))
-    print(terminator.aiDecision(refinedodds, "tightaggressive"))
-    print(terminator.aiDecision(refinedodds, "looseaggressive"))
-    print(terminator.aiDecision(refinedodds, "tightpassive"))
-    print(terminator.aiDecision(refinedodds, "loosepassive"))
-    print(terminator.aiDecision(refinedodds, "madman"))
-main()
-
