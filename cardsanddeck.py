@@ -1,39 +1,32 @@
 import random
 
-class Card:
-	#suit and value
-	def __init__(self, card1, card2):
-		self.card1 = card1
-		self.card2 = card2
-		self.card1 = str(self.interpretcardnum(self.card1) + " " + self.interpretcardsuite(self.card1))
-		self.card2 = str(self.interpretcardnum(self.card2) + " " + self.interpretcardsuite(self.card2))
-		print(self.card1, self.card2)
+class Cards:
+	def __init__(self):
+		self.myvar = 0
 
-
-
-	def interpretcardnum(self, card):
-		if card[0] == 2:
+	def interpretCardNum(self, card):
+		if card[0] == "2":
 			return "Deuce of"
 
-		elif card[0] == 3:
+		elif card[0] == "3":
 			return "Three of"
 
-		elif card[0] == 4:
+		elif card[0] == "4":
 			return "Four of"
 
-		elif card[0] == 5:
+		elif card[0] == "5":
 			return "Five of"
 
-		elif card[0] == 6:
+		elif card[0] == "6":
 			return "Six of"
 
-		elif card[0] == 7:
+		elif card[0] == "7":
 			return "Seven of"
 
-		elif card[0] == 8:
+		elif card[0] == "8":
 			return "Eight of"
 
-		elif card[0] == 9:
+		elif card[0] == "9":
 			return "Nine of"
 
 		elif card[0] == "T":
@@ -51,7 +44,7 @@ class Card:
 		elif card[0] == "A":
 			return "Ace of"
 
-	def interpretcardsuite(self, card):
+	def interpretCardSuit(self, card):
 		if card[1] == "c":
 			return "clubs"
 
@@ -64,51 +57,95 @@ class Card:
 		elif card[1] == "s":
 			return "spades"
 
-class Deck:
-    def __init__(self):
-        self.deck = []
-        for val in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
-            for suit in ["h", "c", "d", "s"]:
-                self.deck.append(val + suit)
-        self.shuffleCards()
-        self.dealHands()
-        self.dealFlop()
-        self.dealTurn()
-        self.dealRiver()
-
-    def shuffleCards(self):
-        random.shuffle(self.deck)
-        print(self.deck)
-
-    def dealHands(self, players):
-    	accum = 0
-    	for player in players:
-    		self.player = self.deck[accum] + self.deck[accum + 1]
-    		accum += 1
-        
-
-        print("Player 1's hand:", self.player1)
-        print("Player 2's hand:", self.player2)
-        print("Player 3's hand:", self.player3)
-        print("Player 4's hand:", self.player4)
-        print("Player 5's hand:", self.player5)
-
-
-    def dealFlop(self):
-        flopcard1 = self.deck[10]
-        flopcard2 = self.deck[11]
-        flopcard3 = self.deck[12]
-
-        print("The flop:", flopcard1, flopcard2, flopcard3)
-
-    def dealTurn(self):
-        turncard = self.deck[13]
-
-        print("The turn:", turncard)
-
-    def dealRiver(self):
-        rivercard = self.deck[14]
-
-        print("The river:", rivercard)
+	def cardText(self, card):
+		return self.interpretCardNum(card) + " " + self.interpretCardSuit(card)
 
 class Deck:
+	def __init__(self):
+		self.deck = []
+		self.accum = 0
+
+		for val in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
+			for suit in ["h", "c", "d", "s"]:
+				self.deck.append(val + suit)
+
+		random.shuffle(self.deck)
+		print(self.deck)
+
+	def dealPlayer1(self):
+		self.player1 = self.deck[self.accum] + self.deck[self.accum + 1]
+		self.accum += 2
+
+		return self.player1
+	
+	def dealPlayer2(self):
+		self.player2 = self.deck[self.accum] + self.deck[self.accum + 1]
+		self.accum += 2
+
+		return self.player2		
+
+	def dealPlayer3(self):
+		self.player3 = self.deck[self.accum] + self.deck[self.accum + 1]
+		self.accum += 2
+
+		return self.player3
+
+	def dealPlayer4(self):
+		self.player4 = self.deck[self.accum] + self.deck[self.accum + 1]
+		self.accum += 2
+
+		return self.player4
+
+	def dealPlayer5(self):
+		self.player5 = self.deck[self.accum] + self.deck[self.accum + 1]
+		self.accum += 2
+
+		return self.player5		
+
+	def dealFlop(self):
+		self.flopcard1 = self.deck[self.accum]
+		self.accum += 1
+
+		self.flopcard2 = self.deck[self.accum]
+		self.accum += 1
+
+		self.flopcard3 = self.deck[self.accum]
+		self.accum += 1
+
+		return self.flopcard1 + self.flopcard2 + self.flopcard3
+
+	def dealTurn(self):
+		self.turncard = self.deck[self.accum]
+		self.accum += 1
+
+		return self.turncard
+
+	def dealRiver(self):
+		self.rivercard = self.deck[self.accum]
+
+		return self.rivercard
+
+def main():
+	deck = Deck()
+	cards = Cards()
+	players = ["player1", "player2", "player3", "player4", "player5"]
+	mycards = deck.dealPlayer1()
+	mycard1 = mycards[0] + mycards[1]
+	mycard2 = mycards[2] + mycards[3]
+
+	print(mycards)
+	print(deck.dealPlayer2())
+	print(deck.dealPlayer3())
+	print(deck.dealPlayer4())
+	print(deck.dealPlayer5())
+	print(deck.dealFlop())
+	print(deck.dealTurn())
+	print(deck.dealRiver())
+	print("========MY CARDS========")
+	print(mycard1)
+	print(mycard2)
+	
+	print(cards.cardText(mycard1))
+	print(cards.cardText(mycard2))
+	
+main()
