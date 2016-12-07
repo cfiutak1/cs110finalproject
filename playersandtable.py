@@ -248,27 +248,27 @@ class Player:
     def BBPlayer(self, player, bigblind):
         if self.bbplayer == "player1":
             self.p1stash -= self.bigblind
-            self.p1tocall -= self.bigblind
+            self.p1bet -= self.bigblind
             
 
         if self.bbplayer == "player2":
             self.p2stash -= self.bigblind
-            self.p2tocall -= self.bigblind
+            self.p2bet -= self.bigblind
             
 
         if self.bbplayer == "player3":
             self.p3stash -= self.bigblind
-            self.p3tocall -= self.bigblind
+            self.p3bet -= self.bigblind
             
 
         if self.bbplayer == "player4":
             self.p4stash -= self.bigblind
-            self.p4tocall -= self.bigblind
+            self.p4bet -= self.bigblind
             
 
         if self.bbplayer == "player5": 
             self.p5stash -= self.bigblind
-            self.p5tocall -= self.bigblind
+            self.p5bet -= self.bigblind
             
 
 
@@ -278,27 +278,27 @@ class Player:
 
         if player == "player1":
             self.p1stash -= self.bigblind / 2
-            self.p1tocall -= self.bigblind / 2
+            self.p1bet -= self.bigblind / 2
             
 
         if player == "player2":
             self.p2stash -= self.bigblind / 2
-            self.p2tocall -= self.bigblind / 2
+            self.p2bet -= self.bigblind / 2
             
 
         if player == "player3":
             self.p3stash -= self.bigblind / 2
-            self.p3tocall -= self.bigblind / 2
+            self.p3bet -= self.bigblind / 2
             
 
         if player == "player4":
             self.p4stash -= self.bigblind / 2
-            self.p4tocall -= self.bigblind / 2
+            self.p4bet -= self.bigblind / 2
             
 
         if player == "player5": 
             self.p5stash -= self.bigblind / 2
-            self.p5tocall -= self.bigblind / 2
+            self.p5bet -= self.bigblind / 2
             
 
     def checkStash(self, player):
@@ -317,21 +317,6 @@ class Player:
     	elif player == "player5":
     		return self.p5stash
 
-    def blindplayer1(self, blind, bigblind):
-    	if blind == "big":
-    		self.p1stash -= bigblind
-    		self.p1tocall -= bigblind
-    	elif blind == "small":
-    		self.p1stash -= (bigblind / 2)
-    		self.p1tocall -= (bigblind / 2)
-
-    def blindplayer2(self, blind, bigblind):
-    	if blind == "big":
-    		self.p2stash -= bigblind
-    		self.p2tocall -= bigblind
-    	elif blind == "small":
-    		self.p2stash -= (bigblind / 2)
-    		self.p2tocall -= (bigblind / 2)
 
 
 class Table:
