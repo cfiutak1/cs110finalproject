@@ -1,321 +1,328 @@
 from datetime import datetime, timedelta
 
 class Player:
-    def __init__(self):
-        self.p1stash = 10000
-        self.p2stash = 10000
-        self.p3stash = 10000
-        self.p4stash = 10000
-        self.p5stash = 10000
+	def __init__(self):
+		self.p1stash = 10000
+		self.p2stash = 10000
+		self.p3stash = 10000
+		self.p4stash = 10000
+		self.p5stash = 10000
 
-    def checkBustOut(self, player):
-        if player == "player1":
-            if self.p1stash == 0:
-                return "Bust"
-            else:
-                return "Alive"
+	def checkBustOut(self, player):
+		if player == "player1":
+			if self.p1stash == 0:
+				return "Bust"
+			else:
+				return "Alive"
 
-        if player == "player2":
-            if self.p2stash == 0:
-                return "Bust"
-            else:
-                return "Alive"
+		if player == "player2":
+			if self.p2stash == 0:
+				return "Bust"
+			else:
+				return "Alive"
 
-        if player == "player3":
-            if self.p3stash == 0:
-                return "Bust"
-            else:
-                return "Alive"
+		if player == "player3":
+			if self.p3stash == 0:
+				return "Bust"
+			else:
+				return "Alive"
 
-        if player == "player4":
-            if self.p4stash == 0:
-                return "Bust"
-            else:
-                return "Alive"
+		if player == "player4":
+			if self.p4stash == 0:
+				return "Bust"
+			else:
+				return "Alive"
 
-        if player == "player5":
-            if self.p5stash == 0:
-                return "Bust"
-            else:
-                return "Alive"
-
-
-
-    def player1(self, tocall, decision, bigblind):
-        self.p1tocall = tocall
-        self.p1decision = decision
-        self.p1bet = 0
-        self.bigblind = bigblind
-        self.p1bet += self.tocall
-
-        if self.p1tocall >= self.p1stash:
-            if self.p1decision == "Fold":
-                return 0
-            elif self.p1decision != "Fold":
-                return self.p1stash
-
-        if self.p1decision == "Fold":
-            return 0
-
-        elif self.p1decision == "Call":
-            self.p1stash -= self.p1bet
-            return self.p1bet
-
-        elif self.p1decision == "Raise2BB":
-            self.p1stash -= self.p1bet * 2
-            return self.p1bet * 2
-
-        elif self.p1decision == "Raise3BB":
-            self.p1stash -= self.p1bet * 3
-            return self.p1bet * 3
-
-        elif self.p1decision == "RaisePot":
-            table = Table()
-            if table.mainPot() <= (self.p1bet * 3):
-                self.p1stash -= self.p1bet * 4
-                return self.p1bet * 4
-            else:
-                self.p1stash -= table.mainPot()
-                return table.mainPot()
-
-        elif self.p1decision == "AllIn":
-            return self.p1stash
+		if player == "player5":
+			if self.p5stash == 0:
+				return "Bust"
+			else:
+				return "Alive"
 
 
 
-    # def player2(self, tocall, decision, bigblind):
-    #     self.p2tocall = tocall
-    #     self.p2decision = decision
-    #     self.p2bet = 0
-    #     self.bigblind = bigblind
+	def player1(self, tocall, decision, bigblind):
+		self.p1tocall = tocall
+		self.p1decision = decision
+		self.p1bet = 0
+		self.bigblind = bigblind
+		self.p1bet += self.p1tocall
 
-    #     if self.tocall >= self.p2stash:
-    #         if self.p2decision == "Fold":
-    #             return 0
-    #         elif self.p2decision != "Fold":
-    #             return self.p2stash
+		if self.p1tocall >= self.p1stash:
+			if self.p1decision == "Fold":
+				return 0
+			elif self.p1decision != "Fold":
+				return self.p1stash
 
-    #     if self.p2decision == "Fold":
-    #         return 0
+		if self.p1decision == "Fold":
+			return 0
 
-    #     elif self.p2decision == "Call":
-    #         self.p2stash -= self.p2tocall
-    #         return self.p2tocall
+		elif self.p1decision == "Call":
+			self.p1stash -= self.p1bet
+			return self.p1bet
 
-    #     elif self.p2decision == "Raise2BB":
-    #         self.p2stash -= self.p2tocall * 2
-    #         return self.p2tocall * 2
+		elif self.p1decision == "Raise2BB":
+			self.p1stash -= self.p1bet * 2
+			return self.p1bet * 2
 
-    #     elif self.p2decision == "Raise3BB":
-    #         self.p2stash -= self.p2tocall * 3
-    #         return self.p2tocall * 3
+		elif self.p1decision == "Raise3BB":
+			self.p1stash -= self.p1bet * 3
+			return self.p1bet * 3
 
-    #     elif self.p2decision == "RaisePot":
-    #         table = Table()
-    #         if table.mainPot() <= (self.p2tocall * 3):
-    #             self.p2stash -= self.p2tocall * 4
-    #             return self.p2tocall * 4
-    #         else:
-    #             self.p2stash -= table.mainPot()
-    #             return table.mainPot()
+		elif self.p1decision == "RaisePot":
+			table = Table()
+			if table.mainPot() <= (self.p1bet * 3):
+				self.p1stash -= self.p1bet * 4
+				return self.p1bet * 4
+			else:
+				self.p1stash -= table.mainPot()
+				return table.mainPot()
 
-    #     elif self.p2decision == "AllIn":
-    #         return self.p2stash
+		elif self.p1decision == "AllIn":
+			self.p1stash = AllIn
+			self.p1stash = 0
+			return AllIn
+
+	def player2(self, tocall, decision, bigblind):
+		self.p2tocall = tocall
+		self.p2decision = decision
+		self.p2bet = 0
+		self.bigblind = bigblind
+		self.p2bet += self.p2tocall
+
+		if self.p2tocall >= self.p2stash:
+			if self.p2decision == "Fold":
+				return 0
+			elif self.p2decision != "Fold":
+				return self.p2stash
+
+		if self.p2decision == "Fold":
+			return 0
+
+		elif self.p2decision == "Call":
+			self.p2stash -= self.p2bet
+			return self.p2bet
+
+		elif self.p2decision == "Raise2BB":
+			self.p2stash -= self.p2bet * 2
+			return self.p2bet * 2
+
+		elif self.p2decision == "Raise3BB":
+			self.p2stash -= self.p2bet * 3
+			return self.p2bet * 3
+
+		elif self.p2decision == "RaisePot":
+			table = Table()
+			if table.mainPot() <= (self.p2bet * 3):
+				self.p2stash -= self.p2bet * 4
+				return self.p2bet * 4
+			else:
+				self.p2stash -= table.mainPot()
+				return table.mainPot()
+
+		elif self.p2decision == "AllIn":
+			self.p2stash = AllIn
+			self.p2stash = 0
+			return AllIn
+
+	def player3(self, tocall, decision, bigblind):
+		self.p3tocall = tocall
+		self.p3decision = decision
+		self.p3bet = 0
+		self.bigblind = bigblind
+		self.p3bet += self.p3tocall
+
+		if self.p3tocall >= self.p3stash:
+			if self.p3decision == "Fold":
+				return 0
+			elif self.p3decision != "Fold":
+				return self.p3stash
+
+		if self.p3decision == "Fold":
+			return 0
+
+		elif self.p3decision == "Call":
+			self.p3stash -= self.p3bet
+			return self.p3bet
+
+		elif self.p3decision == "Raise2BB":
+			self.p3stash -= self.p3bet * 2
+			return self.p3bet * 2
+
+		elif self.p3decision == "Raise3BB":
+			self.p3stash -= self.p3bet * 3
+			return self.p3bet * 3
+
+		elif self.p3decision == "RaisePot":
+			table = Table()
+			if table.mainPot() <= (self.p3bet * 3):
+				self.p3stash -= self.p3bet * 4
+				return self.p3bet * 4
+			else:
+				self.p3stash -= table.mainPot()
+				return table.mainPot()
+
+		elif self.p3decision == "AllIn":
+			self.p3stash = AllIn
+			self.p3stash = 0
+			return AllIn
+
+	def player4(self, tocall, decision, bigblind):
+		self.p4tocall = tocall
+		self.p4decision = decision
+		self.p4bet = 0
+		self.bigblind = bigblind
+		self.p4bet += self.p4tocall
+
+		if self.p4tocall >= self.p4stash:
+			if self.p4decision == "Fold":
+				return 0
+			elif self.p4decision != "Fold":
+				return self.p4stash
+
+		if self.p4decision == "Fold":
+			return 0
+
+		elif self.p4decision == "Call":
+			self.p4stash -= self.p4bet
+			return self.p4bet
+
+		elif self.p4decision == "Raise2BB":
+			self.p4stash -= self.p4bet * 2
+			return self.p4bet * 2
+
+		elif self.p4decision == "Raise3BB":
+			self.p4stash -= self.p4bet * 3
+			return self.p4bet * 3
+
+		elif self.p4decision == "RaisePot":
+			table = Table()
+			if table.mainPot() <= (self.p4bet * 3):
+				self.p4stash -= self.p4bet * 4
+				return self.p4bet * 4
+			else:
+				self.p4stash -= table.mainPot()
+				return table.mainPot()
+
+		elif self.p4decision == "AllIn":
+			self.p4stash = AllIn
+			self.p4stash = 0
+			return AllIn
+
+	def player5(self, tocall, decision, bigblind):
+		self.p5tocall = tocall
+		self.p5decision = decision
+		self.p5bet = 0
+		self.bigblind = bigblind
+		self.p5bet += self.p5tocall
+
+		if self.p5tocall >= self.p5stash:
+			if self.p5decision == "Fold":
+				return 0
+			elif self.p5decision != "Fold":
+				return self.p5stash
+
+		if self.p5decision == "Fold":
+			return 0
+
+		elif self.p5decision == "Call":
+			self.p5stash -= self.p5bet
+			return self.p5bet
+
+		elif self.p5decision == "Raise2BB":
+			self.p5stash -= self.p5bet * 2
+			return self.p5bet * 2
+
+		elif self.p5decision == "Raise3BB":
+			self.p5stash -= self.p5bet * 3
+			return self.p5bet * 3
+
+		elif self.p5decision == "RaisePot":
+			table = Table()
+			if table.mainPot() <= (self.p5bet * 3):
+				self.p5stash -= self.p5bet * 4
+				return self.p5bet * 4
+			else:
+				self.p5stash -= table.mainPot()
+				return table.mainPot()
+
+		elif self.p5decision == "AllIn":
+			self.p5stash = AllIn
+			self.p5stash = 0
+			return AllIn
 
 
-
-    # def player3(self, tocall, decision, bigblind):
-    #     self.p3tocall = tocall
-    #     self.p3decision = decision
-    #     self.p3bet = 0
-    #     self.bigblind = bigblind
-
-    #     if self.p3tocall >= self.p3stash:
-    #         if self.p3decision == "Fold":
-    #             return 0
-    #         elif self.p3decision != "Fold":
-    #             return self.p3stash
-
-    #     if self.p3decision == "Fold":
-    #         return 0
-
-    #     elif self.p3decision == "Call":
-    #         self.p3stash -= self.p3tocall
-    #         return self.p3tocall
-
-    #     elif self.p3decision == "Raise2BB":
-    #         self.p3stash -= self.p3tocall * 2
-    #         return self.p3tocall * 2
-
-    #     elif self.p3decision == "Raise3BB":
-    #         self.p3stash -= self.p3tocall * 3
-    #         return self.p3tocall * 3
-
-    #     elif self.p3decision == "RaisePot":
-    #         table = Table()
-    #         if table.mainPot() <= (self.p3tocall * 3):
-    #             self.p3stash -= self.p3tocall * 4
-    #             return self.p3tocall * 4
-    #         else:
-    #             self.p3stash -= table.mainPot()
-    #             return table.mainPot()
-
-    #     elif self.p3decision == "AllIn":
-    #         return self.p3stash
-
-
-
-    # def player4(self, tocall, decision, bigblind):
-    #     self.p4tocall = tocall
-    #     self.p4decision = decision
-    #     self.p4bet = 0
-    #     self.bigblind = bigblind
-
-    #     if self.p4tocall >= self.p4stash:
-    #         if self.p4decision == "Fold":
-    #             return 0
-    #         elif self.p4decision != "Fold":
-    #             return self.p4stash
-
-    #     if self.p4decision == "Fold":
-    #         return 0
-
-    #     elif self.p4decision == "Call":
-    #         self.p4stash -= self.p4tocall
-    #         return self.p4tocall
-
-    #     elif self.p4decision == "Raise2BB":
-    #         self.p4stash -= self.p4tocall * 2
-    #         return self.p4tocall * 2
-
-    #     elif self.p4decision == "Raise3BB":
-    #         self.p4stash -= self.p4tocall * 3
-    #         return self.p4tocall * 3
-
-    #     elif self.p4decision == "RaisePot":
-    #         table = Table()
-    #         if table.mainPot() <= (self.p4tocall * 3):
-    #             self.p4stash -= self.p4tocall * 4
-    #             return self.p4tocall * 4
-    #         else:
-    #             self.p4stash -= table.mainPot()
-    #             return table.mainPot()
-
-    #     elif self.p4decision == "AllIn":
-    #         return self.p4stash
-
-    # def player5(self, tocall, decision, bigblind):
-    #     self.p5tocall = tocall
-    #     self.p5decision = decision
-    #     self.p5bet = 0
-    #     self.bigblind = bigblind
-
-    #     if self.p5tocall >= self.p5stash:
-    #         if self.p5decision == "Fold":
-    #             return 0
-    #         elif self.p5decision != "Fold":
-    #             return self.p5stash
-
-    #     if self.p5decision == "Fold":
-    #         return 0
-
-    #     elif self.p5decision == "Call":
-    #         self.p5stash -= self.p5tocall
-    #         return self.p5tocall
-
-    #     elif self.p5decision == "Raise2BB":
-    #         self.p5stash -= self.p5tocall * 2
-    #         return self.p5tocall * 2
-
-    #     elif self.p5decision == "Raise3BB":
-    #         self.p5stash -= self.p5tocall * 3
-    #         return self.p5tocall * 3
-
-    #     elif self.p5decision == "RaisePot":
-    #         table = Table()
-    #         if table.mainPot() <= (self.p5tocall * 3):
-    #             self.p5stash -= self.p5tocall * 4
-    #             return self.p5tocall * 4
-    #         else:
-    #             self.p5stash -= table.mainPot()
-    #             return table.mainPot()
-
-    #     elif self.p5decision == "AllIn":
-    #         return self.p5stash
-
-
-
-    def BBPlayer(self, player, bigblind):
-        if self.bbplayer == "player1":
-            self.p1stash -= self.bigblind
-            self.p1bet -= self.bigblind
+	def BBPlayer(self, player, bigblind):
+		if self.bbplayer == "player1":
+			self.p1stash -= self.bigblind
+			self.p1bet -= self.bigblind
             
 
-        if self.bbplayer == "player2":
-            self.p2stash -= self.bigblind
-            self.p2bet -= self.bigblind
+		if self.bbplayer == "player2":
+			self.p2stash -= self.bigblind
+			self.p2bet -= self.bigblind
             
 
-        if self.bbplayer == "player3":
-            self.p3stash -= self.bigblind
-            self.p3bet -= self.bigblind
+		if self.bbplayer == "player3":
+			self.p3stash -= self.bigblind
+			self.p3bet -= self.bigblind
             
 
-        if self.bbplayer == "player4":
-            self.p4stash -= self.bigblind
-            self.p4bet -= self.bigblind
+		if self.bbplayer == "player4":
+			self.p4stash -= self.bigblind
+			self.p4bet -= self.bigblind
             
 
-        if self.bbplayer == "player5": 
-            self.p5stash -= self.bigblind
-            self.p5bet -= self.bigblind
+		if self.bbplayer == "player5": 
+			self.p5stash -= self.bigblind
+			self.p5bet -= self.bigblind
             
 
 
 
-    def SBPlayer(self, player, bigblind):
-        self.bigblind = bigblind
+	def SBPlayer(self, player, bigblind):
+		self.bigblind = bigblind
 
-        if player == "player1":
-            self.p1stash -= self.bigblind / 2
-            self.p1bet -= self.bigblind / 2
+		if player == "player1":
+			self.p1stash -= self.bigblind / 2
+			self.p1bet -= self.bigblind / 2
             
 
-        if player == "player2":
-            self.p2stash -= self.bigblind / 2
-            self.p2bet -= self.bigblind / 2
+		if player == "player2":
+			self.p2stash -= self.bigblind / 2
+			self.p2bet -= self.bigblind / 2
             
 
-        if player == "player3":
-            self.p3stash -= self.bigblind / 2
-            self.p3bet -= self.bigblind / 2
+		if player == "player3":
+			self.p3stash -= self.bigblind / 2
+			self.p3bet -= self.bigblind / 2
             
 
-        if player == "player4":
-            self.p4stash -= self.bigblind / 2
-            self.p4bet -= self.bigblind / 2
+		if player == "player4":
+			self.p4stash -= self.bigblind / 2
+			self.p4bet -= self.bigblind / 2
             
 
-        if player == "player5": 
-            self.p5stash -= self.bigblind / 2
-            self.p5bet -= self.bigblind / 2
+		if player == "player5": 
+			self.p5stash -= self.bigblind / 2
+			self.p5bet -= self.bigblind / 2
             
 
-    def checkStash(self, player):
-    	if player == "player1":
-    		return self.p1stash
+	def checkStash(self, player):
+		if player == "player1":
+			return self.p1stash
 
-    	elif player == "player2":
-    		return self.p2stash
+		elif player == "player2":
+			return self.p2stash
 
-    	elif player == "player3":
-    		return self.p3stash
+		elif player == "player3":
+			return self.p3stash
 
-    	elif player == "player4":
-    		return self.p4stash
+		elif player == "player4":
+			return self.p4stash
 
-    	elif player == "player5":
-    		return self.p5stash
+		elif player == "player5":
+			return self.p5stash
 
 
 
@@ -429,21 +436,21 @@ class Table:
 		else:
 			return "InProgress"
 
-    def roundStatus(self):
-        if self.roundaccum == 0:
-            return "preflop"
-        if self.roundaccum == 1:
-            return "postflop"
-        elif self.roundaccum == 2:
-            return "postturn"
-        elif self.roundaccum == 3:
-            return "postriver"
+	def roundStatus(self):
+		if self.roundaccum == 0:
+			return "preflop"
+		if self.roundaccum == 1:
+			return "postflop"
+		elif self.roundaccum == 2:
+			return "postturn"
+		elif self.roundaccum == 3:
+			return "postriver"
 
-    def advanceRound(self):
-        self.roundaccum += 1
+	def advanceRound(self):
+		self.roundaccum += 1
 
-    def resetRoundAccum(self):
-        self.roundaccum = 0
+	def resetRoundAccum(self):
+		self.roundaccum = 0
 
 
 		
