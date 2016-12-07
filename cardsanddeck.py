@@ -64,13 +64,11 @@ class Deck:
 	def __init__(self):
 		self.deck = []
 		self.accum = 0
-
 		for val in ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"]:
 			for suit in ["h", "c", "d", "s"]:
 				self.deck.append(val + suit)
 
 		random.shuffle(self.deck)
-		print(self.deck)
 
 	def dealPlayer1(self):
 		self.player1 = self.deck[self.accum] + self.deck[self.accum + 1]
@@ -125,27 +123,8 @@ class Deck:
 
 		return self.rivercard
 
-def main():
-	deck = Deck()
-	cards = Cards()
-	players = ["player1", "player2", "player3", "player4", "player5"]
-	mycards = deck.dealPlayer1()
-	mycard1 = mycards[0] + mycards[1]
-	mycard2 = mycards[2] + mycards[3]
+	def resetAccum(self):
+		self.accum = 0
 
-	print(mycards)
-	print(deck.dealPlayer2())
-	print(deck.dealPlayer3())
-	print(deck.dealPlayer4())
-	print(deck.dealPlayer5())
-	print(deck.dealFlop())
-	print(deck.dealTurn())
-	print(deck.dealRiver())
-	print("========MY CARDS========")
-	print(mycard1)
-	print(mycard2)
-	
-	print(cards.cardText(mycard1))
-	print(cards.cardText(mycard2))
-	
-main()
+	def forceShuffle(self):
+		random.shuffle(self.deck)
