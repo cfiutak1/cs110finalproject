@@ -153,19 +153,82 @@ def main():
 
 
 
-			
+			playerdecisions = {}
 			if "player1" in myplayers3:
 				p1decision = str(input("Enter decision: "))
+				playerdecisions["player1"] = p1decision
+
 			if "player2" in myplayers3:
 				p2decision = ai.aiDecision(p2refodds, p2pers)
+				playerdecisions["player2"] = p2decision
+
 			if "player3" in myplayers3:
 				p3decision = ai.aiDecision(p3refodds, p3pers)
+				playerdecisions["player3"] = p3decision
+
 			if "player4" in myplayers3:
 				p4decision = ai.aiDecision(p4refodds, p4pers)
+				playerdecisions["player4"] = p4decision
+
 			if "player5" in myplayers3:
 				p5decision = ai.aiDecision(p5refodds, p5pers)
+				playerdecisions["player5"] = p5decision
 
 			print("P1", p1decision, "P2", p2decision, "P3", p3decision, "P4", p4decision, "P5", p5decision)
+
+
+			for player in myplayers3:
+				if player == "player1":
+					if p1decision == "Fold":
+						myplayers3.remove("player1")
+
+					elif p1decision == "Call" or "Raise2BB" or "Raise3BB" or "RaisePot" or "AllIn":
+						table.mainPot(playerclass.player1(tocall, p1decision, bigblind))
+
+						if "Raise" or "Allin" in p1decision:
+							#adjust order of players
+
+				if player == "player2":
+					if p2decision == "Fold":
+						myplayers3.remove("player2")
+
+					elif p2decision == "Call" or "Raise2BB" or "Raise3BB" or "RaisePot" or "AllIn":
+						table.mainPot(playerclass.player2(tocall, p2decision, bigblind))
+
+						if "Raise" or "Allin" in p2decision:
+							#adjust order of players
+
+				if player == "player3":
+					if p3decision == "Fold":
+						myplayers3.remove("player3")
+
+					elif p3decision == "Call" or "Raise2BB" or "Raise3BB" or "RaisePot" or "AllIn":
+						table.mainPot(playerclass.player3(tocall, p3decision, bigblind))
+
+						if "Raise" or "Allin" in p3decision:
+							#adjust order of players
+
+				if player == "player4":
+					if p4decision == "Fold":
+						myplayers3.remove("player4")
+
+					elif p4decision == "Call" or "Raise2BB" or "Raise3BB" or "RaisePot" or "AllIn":
+						table.mainPot(playerclass.player4(tocall, p4decision, bigblind))
+
+						if "Raise" or "Allin" in p4decision:
+							#adjust order of players
+
+				if player == "player5":
+					if p5decision == "Fold":
+						myplayers3.remove("player5")
+
+					elif p5decision == "Call" or "Raise2BB" or "Raise3BB" or "RaisePot" or "AllIn":
+						table.mainPot(playerclass.player5(tocall, p1decision, bigblind))
+
+						if "Raise" or "Allin" in p5decision:
+							#adjust order of players
+
+			print(playerdecisions)
 
 		deck.resetAccum()
 		deck.forceShuffle()
