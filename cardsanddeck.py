@@ -128,3 +128,11 @@ class Deck:
 
 	def forceShuffle(self):
 		random.shuffle(self.deck)
+
+	def flopList(self):
+		floplist = []
+		floplist.append(self.flopcard1)
+		floplist.append(self.flopcard2)
+		floplist.append(self.flopcard3)
+		self.floplist = floplist
+		return self.floplist
