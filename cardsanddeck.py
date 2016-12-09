@@ -1,4 +1,3 @@
-#COMPLETE, NEEDS DOCUMENTATION OF FUNCTIONS
 import random
 
 class Cards:
